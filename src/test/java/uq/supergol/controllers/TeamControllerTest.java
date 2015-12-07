@@ -51,9 +51,8 @@ public class TeamControllerTest {
 
     private HttpMessageConverter mappingJackson2HttpMessageConverter;
 
-    private Team team;
-
-    private List<Player> playerList = new ArrayList<>();
+    private List<Team> teams;
+    private List<Player> players;
 
     @Autowired
     private TeamRepository teamRepository;
@@ -79,53 +78,50 @@ public class TeamControllerTest {
 
         this.teamRepository.deleteAllInBatch();
         this.playerRepository.deleteAllInBatch();
+        
+        teams = new ArrayList<>();
+        players = new ArrayList<>();
 
-        this.team = teamRepository.save(new Team());
-        teamRepository.save(new Team());
-        teamRepository.save(new Team());
-        this.playerList.add(playerRepository.save(new Player("Jorge", Position.Defender)));
-        this.playerList.add(playerRepository.save(new Player("Julio", Position.GoalKeeper)));
+        for (int i = 0; i < 3; i++) {
+        	teams.add(teamRepository.save(new Team()));
+        }
+        players.add(playerRepository.save(new Player("Jorge", Position.Defender)));
+        players.add(playerRepository.save(new Player("Julio", Position.GoalKeeper)));
     }
 
-//    @Test
-//    public void teamNotFound() throws Exception {
-//        mockMvc.perform(post("/george/bookmarks/")
-//                .content(this.json(new Bookmark()))
-//                .contentType(contentType))
-//                .andExpect(status().isNotFound());
-//    }
+    @Test
+    public void playerNotFound() throws Exception {
+        mockMvc.perform(post("/teams/1/player")
+                .content("15")
+                .contentType(contentType))
+                .andExpect(status().isNotFound());
+    }
+    
+    @Test
+    public void teamNotFound() throws Exception {
+        mockMvc.perform(get("/teams/132"))
+                .andExpect(status().isNotFound());
+    }
 
     @Test
     public void readSingleTeam() throws Exception {
-        mockMvc.perform(get("/teams/" + this.team.getId()))
+    	Team team = teams.get(0);
+        mockMvc.perform(get("/teams/" + team.getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
-        		.andExpect(jsonPath("$.id").value(this.team.getId().intValue()));
+        		.andExpect(jsonPath("$.id").value(team.getId().intValue()));
     }
-
-//    @Test
-//    public void readSingleBookmark() throws Exception {
-//    	mockMvc.perform(get("/" + userName + "/bookmarks/"
-//    			+ this.bookmarkList.get(0).getId()))
-//    	.andExpect(status().isOk())
-//    	.andExpect(content().contentType(contentType))
-//    	.andExpect(jsonPath("$.id", is(this.bookmarkList.get(0).getId().intValue())))
-//    	.andExpect(jsonPath("$.uri", is("http://bookmark.com/1/" + userName)))
-//    	.andExpect(jsonPath("$.description", is("A description")));
-//    }
 
     @Test
     public void readTeams() throws Exception {
         mockMvc.perform(get("/teams"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
-                .andExpect(jsonPath("$").isArray());
-//                .andExpect(jsonPath("$[0].id", is(this.bookmarkList.get(0).getId().intValue())))
-//                .andExpect(jsonPath("$[0].uri", is("http://bookmark.com/1/" + userName)))
-//                .andExpect(jsonPath("$[0].description", is("A description")))
-//                .andExpect(jsonPath("$[1].id", is(this.bookmarkList.get(1).getId().intValue())))
-//                .andExpect(jsonPath("$[1].uri", is("http://bookmark.com/2/" + userName)))
-//                .andExpect(jsonPath("$[1].description", is("A description")));
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$[0].id").value(teams.get(0).getId().intValue()))
+                .andExpect(jsonPath("$[1].id").value(teams.get(1).getId().intValue()))
+                .andExpect(jsonPath("$[2].id").value(teams.get(2).getId().intValue()))                
+                ;
     }
 
     @Test

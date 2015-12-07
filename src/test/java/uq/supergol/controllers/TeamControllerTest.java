@@ -97,7 +97,7 @@ public class TeamControllerTest {
 
     @Test
     public void readSingleTeam() throws Exception {
-        mockMvc.perform(get("/team/" + this.team.getId()))
+        mockMvc.perform(get("/teams/" + this.team.getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
         		.andExpect(jsonPath("$.id").value(this.team.getId().intValue()));
@@ -116,7 +116,7 @@ public class TeamControllerTest {
 
     @Test
     public void readTeams() throws Exception {
-        mockMvc.perform(get("/team"))
+        mockMvc.perform(get("/teams"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$").isArray());
@@ -131,7 +131,7 @@ public class TeamControllerTest {
     @Test
     public void createTeam() throws Exception {
         String teamJson = json(new Team());
-        this.mockMvc.perform(post("/team")
+        this.mockMvc.perform(post("/teams")
                 .contentType(contentType)
                 .content(teamJson))
                 .andExpect(status().isCreated());

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import uq.supergol.model.Player;
+import uq.supergol.model.matches.Round;
 import uq.supergol.repositories.LeagueRepository;
 import uq.supergol.repositories.MatchRepository;
 import uq.supergol.repositories.PlayerRepository;
@@ -19,36 +19,36 @@ import uq.supergol.repositories.RoundRepository;
 import uq.supergol.repositories.TeamRepository;
 
 @RestController
-@RequestMapping("/players")
-public class PlayerController extends BaseController {
-	
+@RequestMapping("/rounds")
+public class RoundController extends BaseController {
+
 	@Autowired
-	PlayerController(PlayerRepository playerRepository, TeamRepository teamRepository,
+	RoundController(PlayerRepository playerRepository, TeamRepository teamRepository,
 			MatchRepository matchRepository, RoundRepository roundRepository,
 			LeagueRepository leagueRepository) {
 		super(playerRepository, teamRepository, matchRepository, roundRepository,
 				leagueRepository);
 	}
 
-	@RequestMapping(value = "/{playerId}", method = RequestMethod.GET)
-	Player readPlayer(@PathVariable Long playerId) {
-		return getPlayer(playerId);
+	@RequestMapping(value = "/{roundId}", method = RequestMethod.GET)
+	Round readRound(@PathVariable Long roundId) {
+		return getRound(roundId);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET)
-	Collection<Player> readPlayers() {
-		return getPlayers();
+	Collection<Round> readRounds() {
+		return getRounds();
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
-	ResponseEntity<?> addPlayer(@RequestBody Player input) {
-		return getResponseEntity(savePlayer(input), HttpStatus.CREATED);
+	ResponseEntity<?> addRound(@RequestBody Round input) {
+		return getResponseEntity(saveRound(input), HttpStatus.CREATED);
 	}
 	
-	@RequestMapping(value = "/{playerId}/points", method = RequestMethod.POST)
-	ResponseEntity<?> addPointsOfRound(@PathVariable Long playerId, @RequestBody int points) {
-		return getResponseEntity(savePlayer(getPlayer(playerId).addPointsOfRound(points)),
+	@RequestMapping(value = "/{roundId}/match", method = RequestMethod.POST)
+	ResponseEntity<?> addMatch(@PathVariable Long roundId, @RequestBody int matchId) {
+		return getResponseEntity(saveRound(getRound(roundId).addMatch(getMatch(matchId))),
 				HttpStatus.OK);
 	}
-	
+
 }

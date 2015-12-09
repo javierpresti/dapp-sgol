@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
@@ -13,7 +14,7 @@ public class Team extends BaseEntity {
 	protected int roundPoints;
 	@ManyToOne
 	protected Player captain;
-	@ManyToMany(mappedBy = "teams")
+	@ManyToMany(mappedBy = "teams", fetch = FetchType.EAGER)
 	protected Set<Player> players = new HashSet<Player>();
 	
 	public Team() {}

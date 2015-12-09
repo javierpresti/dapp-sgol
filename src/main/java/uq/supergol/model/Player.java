@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -19,9 +20,9 @@ public class Player extends BaseEntity {
 	protected String realTeam;
 	@Enumerated
 	protected Position position;
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
 	protected List<Integer> pointsPerRound = new ArrayList<Integer>();
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JsonIgnore
 	protected Set<Team> teams = new HashSet<Team>();
 	

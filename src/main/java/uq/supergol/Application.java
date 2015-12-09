@@ -10,7 +10,10 @@ import org.springframework.context.annotation.Bean;
 import uq.supergol.model.Player;
 import uq.supergol.model.Position;
 import uq.supergol.model.Team;
+import uq.supergol.repositories.LeagueRepository;
+import uq.supergol.repositories.MatchRepository;
 import uq.supergol.repositories.PlayerRepository;
+import uq.supergol.repositories.RoundRepository;
 import uq.supergol.repositories.TeamRepository;
 
 @SpringBootApplication
@@ -24,7 +27,8 @@ public class Application {
     
     @Bean
 	public CommandLineRunner demo(TeamRepository teamRepository, 
-			PlayerRepository playerRepository) {
+			PlayerRepository playerRepository, MatchRepository matchRepository,
+			RoundRepository roundRepository, LeagueRepository leagueRepository) {
 		return (args) -> {
 			teamRepository.save(new Team());
 			teamRepository.save(new Team());

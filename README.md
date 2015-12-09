@@ -6,5 +6,3 @@ TP Super Gol
 Grupo F<br />
 Javier Presti
 
-Travis: https://travis-ci.org/presti/dapp-sgol<br />
-

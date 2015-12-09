@@ -21,7 +21,9 @@ public abstract class BaseEntity {
 	}
 	
 	@Override
-	public abstract String toString();
+	public String toString() {
+		return toString("", new Object[] {});
+	}
 	
 	public Long getId() {
 		return id;

@@ -19,6 +19,12 @@ import uq.supergol.model.Team;
 public class TeamControllerTest extends BaseControllerTest {
 
 	@Test
+	public void teamNotFound() throws Exception {
+		getMockMvc().perform(get("/teams/1"))
+				.andExpect(status().isNotFound());
+	}
+	
+	@Test
 	public void playerNotFound() throws Exception {
 		Team team = addTeam();
 		getMockMvc().perform(post("/teams/" + team.getId() + "/player")
@@ -58,7 +64,7 @@ public class TeamControllerTest extends BaseControllerTest {
 	}
 
 	@Test
-	public void playerAdded() throws Exception {
+	public void playerAdd() throws Exception {
 		Team team = addTeam();
 		addPlayer("Jorge", Position.Defender);
 		Player player = addPlayer("Dario", Position.Defender);
@@ -71,20 +77,40 @@ public class TeamControllerTest extends BaseControllerTest {
 	}
 	
 	@Test
-	public void teamNotFound() throws Exception {
-		getMockMvc().perform(get("/teams/1"))
-				.andExpect(status().isNotFound());
+	public void playerRemove() throws Exception {
+		Team team = addTeam();
+		Player player = addPlayer("Dario", Position.Defender);
+		getMockMvc().perform(post("/teams/" + team.getId() + "/player")
+				.content(String.valueOf(player.getId()))
+				.contentType(getContentType()))
+				.andExpect(status().isOk());
+		Assert.assertTrue(teamContainsPlayer(team.getId(), player.getId()));
+		
+		getMockMvc().perform(post("/teams/" + team.getId() + "/player-remove")
+				.content(String.valueOf(player.getId()))
+				.contentType(getContentType()))
+				.andExpect(status().isOk());
+		Assert.assertFalse(teamContainsPlayer(team.getId(), player.getId()));
 	}
 	
 	@Test
 	public void captainAdded() throws Exception {
 		Team team = addTeam();
-		Player captain = addPlayer("Jorge", Position.Defender);
-		getMockMvc().perform(post("/teams/" + team.getId() + "/captain")
-				.content(String.valueOf(captain.getId()))
+		Player player = addPlayer("Jorge", Position.Defender);
+
+		//adding player
+		getMockMvc().perform(post("/teams/" + team.getId() + "/player")
+				.content(String.valueOf(player.getId()))
 				.contentType(getContentType()))
 				.andExpect(status().isOk());
-		Assert.assertTrue(teamContainsCaptain(team.getId(), captain.getId()));
+		
+		//adding captain
+		getMockMvc().perform(post("/teams/" + team.getId() + "/captain")
+				.content(String.valueOf(player.getId()))
+				.contentType(getContentType()))
+				.andExpect(status().isOk());
+		
+		Assert.assertTrue(teamContainsCaptain(team.getId(), player.getId()));
 	}
 	
 	@Test

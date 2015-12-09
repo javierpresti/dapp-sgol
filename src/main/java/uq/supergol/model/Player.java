@@ -17,9 +17,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class Player extends BaseEntity {
 	
 	protected String name;
-	protected String realTeam;
 	@Enumerated
 	protected Position position;
+	protected String realTeam;
 	@ElementCollection(fetch = FetchType.EAGER)
 	protected List<Integer> pointsPerRound = new ArrayList<Integer>();
 	@ManyToMany(fetch = FetchType.EAGER)
@@ -38,6 +38,11 @@ public class Player extends BaseEntity {
 		return this;
 	}
 	
+	public Player removeTeam(Team team) {
+		this.getTeams().remove(team);
+		return this;
+	}
+	
 	public Player addPointsOfRound(int points) {
 		getPointsPerRound().add(points);
 		return this;
@@ -49,9 +54,13 @@ public class Player extends BaseEntity {
 	}
 	
 	public String getName() 					{	return name;	}
+	public Position getPosition()				{	return position;	}
 	public String getRealTeam() 				{	return realTeam;	}
 	public Set<Team> getTeams()					{	return teams;	}
 	public List<Integer> getPointsPerRound()	{	return pointsPerRound;	}
-	public Position getPosition()				{	return position;	}
+
+	public void setName(String name)			{	this.name = name;	}
+	public void setPosition(Position position)	{	this.position = position;	}
+	public void setRealTeam(String realTeam)	{	this.realTeam = realTeam;	}
 	
 }

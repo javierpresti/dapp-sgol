@@ -56,6 +56,12 @@ public class TeamController extends BaseController {
 				HttpStatus.OK);
 	}
 	
+	@RequestMapping(value = "/{teamId}/player-remove", method = RequestMethod.POST)
+	ResponseEntity<?> removePlayer(@PathVariable long teamId, @RequestBody long playerId) {
+		return getResponseEntity(saveTeam(getTeam(teamId).removePlayer(getPlayer(playerId))), 
+				HttpStatus.OK);
+	}
+	
 	@RequestMapping(value = "/{teamId}/captain", method = RequestMethod.POST)
 	ResponseEntity<?> addCaptain(@PathVariable long teamId, @RequestBody long captainId) {
 		return getResponseEntity(saveTeam(getTeam(teamId).setCaptain(getPlayer(captainId))), 

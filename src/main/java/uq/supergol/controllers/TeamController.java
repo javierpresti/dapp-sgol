@@ -45,9 +45,14 @@ public class TeamController extends BaseController {
 		return getResponseEntity(saveTeam(input), HttpStatus.CREATED);
 	}
 
+	@RequestMapping(value = "/{teamId}/name", method = RequestMethod.POST)
+	ResponseEntity<?> setName(@PathVariable long teamId, @RequestBody String name) {
+		return getResponseEntity(saveTeam(getTeam(teamId).setName(name)), HttpStatus.OK);
+	}
+	
 	@RequestMapping(value = "/{teamId}/points", method = RequestMethod.POST)
 	ResponseEntity<?> addPoints(@PathVariable long teamId, @RequestBody int points) {
-		return getResponseEntity(saveTeam(getTeam(teamId).addPoints(points)), HttpStatus.OK);
+		return getResponseEntity(saveTeam(getTeam(teamId).setPoints(points)), HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/{teamId}/player", method = RequestMethod.POST)
@@ -56,7 +61,7 @@ public class TeamController extends BaseController {
 				HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/{teamId}/player-remove", method = RequestMethod.POST)
+	@RequestMapping(value = "/{teamId}/playerremove", method = RequestMethod.POST)
 	ResponseEntity<?> removePlayer(@PathVariable long teamId, @RequestBody long playerId) {
 		return getResponseEntity(saveTeam(getTeam(teamId).removePlayer(getPlayer(playerId))), 
 				HttpStatus.OK);

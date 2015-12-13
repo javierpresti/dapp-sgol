@@ -1,0 +1,36 @@
+<div class="container">
+	<div ng-controller="players" ng-cloak class="ng-cloak">
+		<div class="form">
+			<label for="name">Nombre:</label> 
+			<input id="name" ng-model="name" type="text" />
+			<label for="position">Posición:</label>
+			<select id="position" ng-model="position">
+				<option value="GoalKeeper">Arquero</option>
+				<option value="Defender">Defensor</option>
+				<option value="Midfielder">Mediocampista</option>
+				<option value="Forward">Delantero</option>
+			</select>
+			<label for="realTeam">Equipo:</label> 
+			<input id="realTeam" ng-model="realTeam" type="text" />
+			<button ng-click="setPlayers({name: name, position: position, realTeam: realTeam})"
+					id="addBtn" class="btn bln-lg">Añadir jugador</button>
+		</div>
+		<h3>Jugadores</h3>
+		<table class="table">
+			<tr>
+				<th>Id</th>
+				<th>Nombre</th>
+				<th>Posición</th>
+				<th>Equipo</th>
+				<th>Puntos por ronda</th>
+			</tr>
+			<tr ng-repeat="player in players">
+				<td>{{player.id}}</td>
+				<td>{{player.name}}</td>
+				<td>{{player.position}}</td>
+				<td>{{player.realTeam}}</td>
+				<td>{{player.points}}</td>
+			</tr>
+		</table>
+	</div>
+</div>

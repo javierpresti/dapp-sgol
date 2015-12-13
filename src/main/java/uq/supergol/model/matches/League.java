@@ -75,12 +75,22 @@ public class League extends BaseEntity {
 	}
 
 	public boolean canInit() {
-		return teams.size() >= getMinTeams() && teams.size() <= getMaxTeams();
+		return getTeams().size() >= getMinTeams() && getTeams().size() <= getMaxTeams();
 	}
 	
-	public League addRound(Round round)	{	rounds.add(round); return this;	}
-	public League addTeam(Team team)	{	teams.add(team); return this;	}
-	public League removeTeam(Team team)	{	teams.remove(team); return this;	}
+	protected boolean canAddTeam() {
+		return getTeams().size() < getMaxTeams();
+	}
+	
+	public League addRound(Round round)	{	getRounds().add(round); return this;	}
+	public League removeTeam(Team team)	{	getTeams().remove(team); return this;	}
+	
+	public League addTeam(Team team) {
+		if (canAddTeam()) {
+			getTeams().add(team);
+		}
+		return this;
+	}
 	
 	public String getName()	{	return name;	}
 	public int getMinTeams()	{	return minTeams;	}

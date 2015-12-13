@@ -1,0 +1,55 @@
+<div class="container">
+	<div ng-controller="teams" ng-cloak class="ng-cloak">
+		<div ng-hide="editing">
+			<div class="form">
+				<label for="name">Nombre:</label>
+				<input id="name" ng-model="name" type="text" />
+				<button id="addBtn" class="btn bln-lg" ng-click="setTeams({name: name})">Añadir equipo</button>
+			</div>
+			<h3>Equipos</h3>
+			<table class="table">
+				<tr>
+					<th>Id</th>
+					<th>Nombre</th>
+					<th>Puntos</th>
+					<th>Capitán</th>
+					<th>Jugadores</th>
+					<th></th>
+				</tr>
+				<tr ng-repeat="team in teams">
+					<td>{{team.id}}</td>
+					<td>{{team.name}}</td>
+					<td>{{team.roundPoints}}</td>
+					<td>{{team.captain.id}}</td>
+					<td>{{team.players.length}}</td>
+					<td>
+						<button class="btn bln-lg" ng-click="setEditItem(team)">Editar</button>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div ng-show="editing">
+			<h4>Editar equipo id {{editing.id}}</h4>
+			<div>
+				<label for="name">Nombre:</label>
+				<input type="text" ng-model="editing.name"/>
+				<button class="btn bln-lg" ng-click="editItem('name')">Editar nombre</button>
+			</div>
+			<div>
+				<label for="captain">Capitán:</label>
+				<select ng-model="editing.captain" ng-options="p.id for p in editing.players"></select>
+				<button class="btn bln-lg" ng-click="editItem('captain')">Editar capitán</button>
+			</div>
+			<div>
+				<label for="player">Jugador:</label>
+				<input id="player" ng-model="editing.player" type="number" min="1"/>
+				<button class="btn bln-lg" ng-click="editItem('player')">Agregar</button>
+			</div>
+			<div>
+				<label for="playerremove">Jugador:</label>
+				<input id="player" ng-model="editing.playerremove" type="number" min="1"/>
+				<button class="btn bln-lg" ng-click="editItem('playerremove')">Eliminar</button>
+			</div>
+		</div>
+	</div>
+</div>

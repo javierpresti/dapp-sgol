@@ -46,9 +46,14 @@ public class PlayerController extends BaseController {
 	}
 	
 	@RequestMapping(value = "/{playerId}/points", method = RequestMethod.POST)
-	ResponseEntity<?> addPointsOfRound(@PathVariable Long playerId, @RequestBody int points) {
-		return getResponseEntity(savePlayer(getPlayer(playerId).addPointsOfRound(points)),
+	ResponseEntity<?> addPoints(@PathVariable Long playerId, @RequestBody int points) {
+		return getResponseEntity(savePlayer(getPlayer(playerId).setPoints(points)),
 				HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/{playerId}/goals", method = RequestMethod.POST)
+	ResponseEntity<?> addGoals(@PathVariable Long playerId, @RequestBody int goals) {
+		return getResponseEntity(savePlayer(getPlayer(playerId).setGoals(goals)), HttpStatus.OK);
 	}
 	
 }

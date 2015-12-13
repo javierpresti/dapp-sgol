@@ -1,0 +1,17 @@
+<div class="container">
+	<div ng-controller="teams" ng-cloak class="ng-cloak">
+		<h3>Ranking</h3>
+		<table class="table">
+			<tr>
+				<th>Id</th>
+				<th>Nombre</th>
+				<th>Puntos</th>
+			</tr>
+			<tr ng-repeat="team in teams | orderBy:'-roundPoints'">
+				<td>{{team.id}}</td>
+				<td>{{team.name}}</td>
+				<td>{{team.roundPoints}}</td>
+			</tr>
+		</table>
+	</div>
+</div>

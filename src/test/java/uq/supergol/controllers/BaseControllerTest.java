@@ -125,14 +125,14 @@ public class BaseControllerTest {
 	}
 	
 	protected List<Integer> getPlayerPoints(long playerId) {
-		return getPlayer(playerId).getPointsPerRound();
+		return getPlayer(playerId).getPoints();
 	}
 
 	protected Team addTeam() {
-		return teamRepository.save(new Team());
+		return teamRepository.save(new Team("team"));
 	}
-	protected Player addPlayer(String name, Position pos) {
-		return playerRepository.save(new Player(name, pos));
+	protected Player addPlayer(String name, Position pos, String realTeam) {
+		return playerRepository.save(new Player(name, pos, realTeam));
 	}
 	protected Match addMatch(Team team1, Team team2) {
 		return matchRepository.save(new Match(team1, team2));

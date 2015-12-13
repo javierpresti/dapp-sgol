@@ -1,0 +1,24 @@
+<div class="container">
+	<div ng-controller="players" ng-cloak class="ng-cloak">
+		<h3>Goles por jugador</h3>
+		<table class="table">
+			<tr>
+				<th>Id</th>
+				<th>Nombre</th>
+				<th>Equipo</th>
+				<th>Posición</th>
+				<th>Goles anotados</th>
+			</tr>
+			<tr ng-repeat="player in players">
+				<td>{{player.id}}</td>
+				<td>{{player.name}}</td>
+				<td>{{player.realTeam}}</td>
+				<td>{{player.position}}</td>
+				<td>
+					<input id="goals" ng-model="player.goals" type="number" min="0"/>
+				</td>
+			</tr>
+		</table>
+		<button id="updateBtn" class="btn bln-lg" ng-click="setGoalsAll(players)">Incluir fecha</button>
+	</div>
+</div>

@@ -59,15 +59,15 @@ public class TeamControllerTest extends BaseControllerTest {
 	public void createTeam() throws Exception {
 		getMockMvc().perform(post("/teams")
 				.contentType(getContentType())
-				.content(json(new Team())))
+				.content(json(new Team("team"))))
 				.andExpect(status().isCreated());
 	}
 
 	@Test
 	public void playerAdd() throws Exception {
 		Team team = addTeam();
-		addPlayer("Jorge", Position.Defender);
-		Player player = addPlayer("Dario", Position.Defender);
+		addPlayer("Jorge", Position.Defender, "Boca");
+		Player player = addPlayer("Dario", Position.Defender, "Estudiantes");
 		Assert.assertFalse(team.getPlayers().contains(player));
 		getMockMvc().perform(post("/teams/" + team.getId() + "/player")
 				.content(String.valueOf(player.getId()))
@@ -79,14 +79,14 @@ public class TeamControllerTest extends BaseControllerTest {
 	@Test
 	public void playerRemove() throws Exception {
 		Team team = addTeam();
-		Player player = addPlayer("Dario", Position.Defender);
+		Player player = addPlayer("Dario", Position.Defender, "Boca");
 		getMockMvc().perform(post("/teams/" + team.getId() + "/player")
 				.content(String.valueOf(player.getId()))
 				.contentType(getContentType()))
 				.andExpect(status().isOk());
 		Assert.assertTrue(teamContainsPlayer(team.getId(), player.getId()));
 		
-		getMockMvc().perform(post("/teams/" + team.getId() + "/player-remove")
+		getMockMvc().perform(post("/teams/" + team.getId() + "/playerremove")
 				.content(String.valueOf(player.getId()))
 				.contentType(getContentType()))
 				.andExpect(status().isOk());
@@ -96,7 +96,7 @@ public class TeamControllerTest extends BaseControllerTest {
 	@Test
 	public void captainAdded() throws Exception {
 		Team team = addTeam();
-		Player player = addPlayer("Jorge", Position.Defender);
+		Player player = addPlayer("Jorge", Position.Defender, "River");
 
 		//adding player
 		getMockMvc().perform(post("/teams/" + team.getId() + "/player")

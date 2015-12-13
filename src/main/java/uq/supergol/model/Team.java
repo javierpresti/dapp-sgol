@@ -18,7 +18,11 @@ public class Team extends BaseEntity {
 	@ManyToMany(mappedBy = "teams", fetch = FetchType.EAGER)
 	protected Set<Player> players = new HashSet<Player>();
 	
-	public Team() {}
+	Team() {}
+	
+	public Team(String name) {
+		this.name = name;
+	}
 
 	public Team addPlayer(Player player) {
 		if (canAddPlayer(player)) getPlayers().add(player.addTeam(this));
@@ -30,7 +34,7 @@ public class Team extends BaseEntity {
 		return this;
 	}
 	
-	public Team addPoints(int points) {
+	public Team setPoints(int points) {
 		this.roundPoints += points;
 		return this;
 	}
@@ -43,14 +47,13 @@ public class Team extends BaseEntity {
 		boolean canAdd = getPlayers().size() < 11;
 		if (canAdd) {
 			Position position = player.getPosition();
-			canAdd = playersOfPosition(position) <= position.maxPlayersPerTeam;
+			canAdd = playersOfPosition(position) < position.maxPlayersPerTeam;
 		}
 		return canAdd;
 	}
 	
 	private int playersOfPosition(Position position) {
 		int qty = 0;
-		
 		for (Player player : getPlayers()) {
 			if (player.position.equals(position)) {
 				qty++;
@@ -72,11 +75,11 @@ public class Team extends BaseEntity {
 		return this;
 	}
 	
+	public Team setName(String name)	{	this.name = name; return this;	}
+
 	public String getName()				{	return name;	}
 	public int getRoundPoints() 		{	return roundPoints;	}
 	public Set<Player> getPlayers()		{	return players;		}
 	public Player getCaptain()			{	return captain;		}
 	
-	public void setName(String name)	{	this.name = name;	}
-
 }

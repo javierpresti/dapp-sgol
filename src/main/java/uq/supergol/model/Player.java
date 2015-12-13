@@ -21,16 +21,17 @@ public class Player extends BaseEntity {
 	protected Position position;
 	protected String realTeam;
 	@ElementCollection(fetch = FetchType.EAGER)
-	protected List<Integer> pointsPerRound = new ArrayList<Integer>();
+	protected List<Integer> points = new ArrayList<Integer>();
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JsonIgnore
 	protected Set<Team> teams = new HashSet<Team>();
 	
 	Player() {}
 	
-	public Player(String name, Position position) {
+	public Player(String name, Position position, String realTeam) {
 		this.name = name;
 		this.position = position;
+		this.realTeam = realTeam;
 	}
 	
 	public Player addTeam(Team team) {
@@ -43,9 +44,13 @@ public class Player extends BaseEntity {
 		return this;
 	}
 	
-	public Player addPointsOfRound(int points) {
-		getPointsPerRound().add(points);
+	public Player setPoints(int points) {
+		getPoints().add(points);
 		return this;
+	}
+	
+	public Player setGoals(int goals) {
+		return setPoints(getPosition().pointsFor(goals));
 	}
 	
 	@Override
@@ -53,11 +58,11 @@ public class Player extends BaseEntity {
 		return toString(", name=%s, position=%s", getName(), getPosition());
 	}
 	
-	public String getName() 					{	return name;	}
-	public Position getPosition()				{	return position;	}
-	public String getRealTeam() 				{	return realTeam;	}
-	public Set<Team> getTeams()					{	return teams;	}
-	public List<Integer> getPointsPerRound()	{	return pointsPerRound;	}
+	public String getName() 			{	return name;	}
+	public Position getPosition()		{	return position;	}
+	public String getRealTeam() 		{	return realTeam;	}
+	public Set<Team> getTeams()			{	return teams;	}
+	public List<Integer> getPoints()	{	return points;	}
 
 	public void setName(String name)			{	this.name = name;	}
 	public void setPosition(Position position)	{	this.position = position;	}

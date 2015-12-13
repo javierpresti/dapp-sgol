@@ -18,28 +18,34 @@ import uq.supergol.repositories.TeamRepository;
 
 @SpringBootApplication
 public class Application {
-	
+
 	private static final Logger log = LoggerFactory.getLogger(Application.class);
 
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
-    }
-    
-    @Bean
-	public CommandLineRunner demo(TeamRepository teamRepository, 
-			PlayerRepository playerRepository, MatchRepository matchRepository,
-			RoundRepository roundRepository, LeagueRepository leagueRepository) {
+	public static void main(String[] args) {
+		SpringApplication.run(Application.class, args);
+	}
+
+	@Bean
+	public CommandLineRunner demo(TeamRepository teamRepository, PlayerRepository playerRepository,
+			MatchRepository matchRepository, RoundRepository roundRepository, LeagueRepository leagueRepository) {
 		return (args) -> {
-			teamRepository.save(new Team());
-			teamRepository.save(new Team());
-			teamRepository.save(new Team());
-			teamRepository.save(new Team());
-			
-			playerRepository.save(new Player("Jorge", Position.Defender));
-			playerRepository.save(new Player("Pablo", Position.Forward));
-			playerRepository.save(new Player("Tomas", Position.GoalKeeper));
+			Player player1 = new Player("Jorge", Position.Defender, "Boca");
+			Player player2 = new Player("Pablo", Position.Forward, "River");
+			Player player3 = new Player("Tomas", Position.GoalKeeper, "Arsenal");
+			playerRepository.save(player1);
+			playerRepository.save(player2);
+			playerRepository.save(player3);
+
+			Team team1 = new Team("team1");
+			team1.addPlayer(player1);
+			team1.addPlayer(player2);
+
+			teamRepository.save(team1);
+			teamRepository.save(new Team("team2"));
+			teamRepository.save(new Team("team3"));
+			teamRepository.save(new Team("team4"));
 
 		};
 	}
-    
+
 }

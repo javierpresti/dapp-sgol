@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import uq.supergol.model.Player;
+import uq.supergol.model.Position;
 import uq.supergol.model.Team;
 import uq.supergol.model.matches.League;
 import uq.supergol.model.matches.Match;
@@ -42,6 +43,11 @@ public class PlayerController extends BaseController {
 	@RequestMapping(method = RequestMethod.GET)
 	Collection<Player> readPlayers() {
 		return getPlayers();
+	}
+	
+	@RequestMapping(value = "/position/{position}", method = RequestMethod.GET)
+	Collection<Player> readPlayersOfPosition(@PathVariable String position) {
+		return playerRepository.findByPosition(Position.valueOf(position));
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)

@@ -21,6 +21,14 @@ function addGet(name, scope, http) {
 	}
 }
 
+function addGetSub(name, scope, http, subname) {
+	scope[getString(name + capitalizeFirst(subname))] = function(value) {
+		http.get('/' + name + '/' + subname + '/' + value).success(function(data) {
+			scope[name + capitalizeFirst(subname)] = data;
+		})
+	}
+}
+
 function addPost(name, scope, http, subname) {
 	scope[setString(subname ? subname : name)] = function(value, id) {
 		http.post('/' + name + '/' + (id?id+'/':'') + (subname?subname:''), value).success(function(data) {
@@ -29,13 +37,15 @@ function addPost(name, scope, http, subname) {
 	}
 }
 
-function contr(name, subnames, alls, attributes) {
+function contr(name, subnames, alls, attributes, subgets) {
 	
 	return function($scope, $http) {
 		addGet(name, $scope, $http)
 		addPost(name, $scope, $http)
 		subnames = getElse(subnames, [])
+		subgets = getElse(subgets, [])
 		subnames.forEach(function(subname) {addPost(name, $scope, $http, subname)})
+		subgets.forEach(function(subget) {addGetSub(getElse(subget.name, name), $scope, $http, subget.subname)})
 		
 		getElse(alls, []).forEach(function(all) {
 			$scope[setString(all)+'All'] = function(list) {
@@ -60,7 +70,7 @@ function contr(name, subnames, alls, attributes) {
 			args = [].slice.apply(arguments)
 			args.forEach(function(arg) { $scope[setString(arg)](obj[arg], obj["id"]) })
 			$scope.editing = null
-		}
+		}		
 		
 		passAttributes(attributes, $scope)
 				
@@ -76,7 +86,7 @@ function route(routeProvider, name, controller) {
 }
 
 var app = angular.module('app', ['ngRoute'])
-	.controller('teams', contr('teams', ['name','totalpoints','player','playerremove','captain']))
+	.controller('teams', contr('teams', ['name','totalpoints','player','playerremove','captain'], [], {}, [{name:'players',subname:'position'}]))
 	.controller('players', contr('players', ['points','goals', 'all'], ['goals'], {position:'Defender'}))
 	.controller('leagues', contr('leagues', ['round','team','init'], [], {minTeams:2, maxTeams:2}))
 	.controller('rounds', contr('players', ['match']))

@@ -20,7 +20,7 @@
 					<td>{{team.id}}</td>
 					<td>{{team.name}}</td>
 					<td>{{team.roundPoints}}</td>
-					<td>{{team.captain.id}}</td>
+					<td>{{team.captain.name}}</td>
 					<td>{{team.players.length}}</td>
 					<td>
 						<button class="btn bln-lg" ng-click="setEditItem(team)">Editar</button>
@@ -37,17 +37,24 @@
 			</div>
 			<div>
 				<label for="captain">Capitán:</label>
-				<select ng-model="editing.captain" ng-options="p.id for p in editing.players"></select>
+				<select ng-model="editing.captain" ng-options="p.id as p.name for p in editing.players"></select>
 				<button class="btn bln-lg" ng-click="editItem('captain')">Editar capitán</button>
 			</div>
 			<div>
 				<label for="player">Jugador:</label>
-				<input id="player" ng-model="editing.player" type="number" min="1"/>
+				<select id="position" ng-model="position" ng-change="getPlayersPosition(position)">
+					<option value="GoalKeeper">Arquero</option>
+					<option value="Defender">Defensor</option>
+					<option value="Midfielder">Mediocampista</option>
+					<option value="Forward">Delantero</option>
+				</select>
+				<select ng-model="editing.player"
+						ng-options="p.id as p.name for p in playersPosition"/>
 				<button class="btn bln-lg" ng-click="editItem('player')">Agregar</button>
 			</div>
 			<div>
 				<label for="playerremove">Jugador:</label>
-				<input id="player" ng-model="editing.playerremove" type="number" min="1"/>
+				<select ng-model="editing.playerremove" ng-options="p.id as p.name for p in editing.players"></select>
 				<button class="btn bln-lg" ng-click="editItem('playerremove')">Eliminar</button>
 			</div>
 		</div>

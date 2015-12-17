@@ -9,7 +9,7 @@ import uq.supergol.model.Team;
 
 public interface TeamRepository extends JpaRepository<Team, Long> {
 
-	Collection<Team> findByRoundPoints(int roundPoints);
+	Collection<Team> findByTotalPoints(int totalPoints);
 	Collection<Team> findByCaptain(Player captain);
 	
 }

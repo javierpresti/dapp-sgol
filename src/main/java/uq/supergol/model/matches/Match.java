@@ -31,6 +31,16 @@ public class Match extends BaseEntity {
 	public Match setScore(int scoreTeam0, int scoreTeam1) {
 		score0 = scoreTeam0;
 		score1 = scoreTeam1;
+		if (score0 == score1) {
+			team0.setTotalPoints(1);
+			team1.setTotalPoints(1);
+		} else if (score0 > score1) {
+			team0.setTotalPoints(3);
+			team1.setTotalPoints(0);
+		} else {
+			team0.setTotalPoints(0);
+			team1.setTotalPoints(3);
+		}
 		return this;
 	}
 

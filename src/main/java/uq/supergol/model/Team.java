@@ -1,8 +1,11 @@
 package uq.supergol.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
@@ -12,7 +15,9 @@ import javax.persistence.ManyToOne;
 public class Team extends BaseEntity {
 
 	protected String name;
-	protected int roundPoints;
+	protected int totalPoints;
+	@ElementCollection(fetch = FetchType.EAGER)
+	protected List<Integer> points = new ArrayList<Integer>();
 	@ManyToOne
 	protected Player captain;
 	@ManyToMany(mappedBy = "teams", fetch = FetchType.EAGER)
@@ -34,8 +39,14 @@ public class Team extends BaseEntity {
 		return this;
 	}
 	
-	public Team setPoints(int points) {
-		this.roundPoints += points;
+	public Team setTotalPoints(int points) {
+		this.totalPoints += points;
+		return this;
+	}
+	
+	public Team addPoints(int index, int points) {
+		if (index == getPoints().size()) getPoints().add(0);
+		getPoints().set(index, getPoints().get(index) + points);
 		return this;
 	}
 	
@@ -62,9 +73,16 @@ public class Team extends BaseEntity {
 		return qty;
 	}
 	
+	public int getPointsFor(int roundNumber) {
+		if (getPoints().size() == roundNumber) {
+			getPoints().add(0);
+		}
+		return getPoints().get(roundNumber);
+	}
+	
 	@Override
 	public String toString() {
-		return toString(", points=%d", getRoundPoints());
+		return toString(", points=%d", getTotalPoints());
 	}
 	
 	public Team setCaptain(Player player) {
@@ -78,7 +96,8 @@ public class Team extends BaseEntity {
 	public Team setName(String name)	{	this.name = name; return this;	}
 
 	public String getName()				{	return name;	}
-	public int getRoundPoints() 		{	return roundPoints;	}
+	public int getTotalPoints() 		{	return totalPoints;	}
+	public List<Integer> getPoints() 	{	return points;	}
 	public Set<Player> getPlayers()		{	return players;		}
 	public Player getCaptain()			{	return captain;		}
 	

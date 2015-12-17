@@ -7,10 +7,10 @@
 				<th>Nombre</th>
 				<th>Puntos</th>
 			</tr>
-			<tr ng-repeat="team in teams | orderBy:'-roundPoints'">
+			<tr ng-repeat="team in teams | orderBy:'-totalPoints'">
 				<td>{{team.id}}</td>
 				<td>{{team.name}}</td>
-				<td>{{team.roundPoints}}</td>
+				<td>{{team.totalPoints}}</td>
 			</tr>
 		</table>
 	</div>

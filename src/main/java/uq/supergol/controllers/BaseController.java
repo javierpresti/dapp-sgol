@@ -75,7 +75,7 @@ public abstract class BaseController {
 	}
 	
 	@ResponseStatus(HttpStatus.NOT_FOUND)
-	class NotFoundException extends RuntimeException {
+	class setEditItemNotFoundException extends RuntimeException {
 
 		private static final long serialVersionUID = -6635602726156831996L;
 

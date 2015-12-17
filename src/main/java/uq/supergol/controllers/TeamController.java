@@ -50,9 +50,9 @@ public class TeamController extends BaseController {
 		return getResponseEntity(saveTeam(getTeam(teamId).setName(name)), HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/{teamId}/points", method = RequestMethod.POST)
+	@RequestMapping(value = "/{teamId}/totalpoints", method = RequestMethod.POST)
 	ResponseEntity<?> addPoints(@PathVariable long teamId, @RequestBody int points) {
-		return getResponseEntity(saveTeam(getTeam(teamId).setPoints(points)), HttpStatus.OK);
+		return getResponseEntity(saveTeam(getTeam(teamId).setTotalPoints(points)), HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/{teamId}/player", method = RequestMethod.POST)

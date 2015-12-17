@@ -116,16 +116,16 @@ public class TeamControllerTest extends BaseControllerTest {
 	@Test
 	public void pointsAdded() throws Exception {
 		Team team = addTeam();
-		Assert.assertEquals(0, team.getRoundPoints());
+		Assert.assertEquals(0, team.getTotalPoints());
 		int pointsToAdd = 3;
-		getMockMvc().perform(post("/teams/" + team.getId() + "/points")
+		getMockMvc().perform(post("/teams/" + team.getId() + "/totalpoints")
 				.content(String.valueOf(pointsToAdd))
 				.contentType(getContentType()))
 				.andExpect(status().isOk());
 		Assert.assertEquals(pointsToAdd, getTeamPoints(team.getId()));
 
 		int newPointsToAdd = 1;
-		getMockMvc().perform(post("/teams/" + team.getId() + "/points")
+		getMockMvc().perform(post("/teams/" + team.getId() + "/totalpoints")
 				.content(String.valueOf(newPointsToAdd))
 				.contentType(getContentType()))
 				.andExpect(status().isOk());

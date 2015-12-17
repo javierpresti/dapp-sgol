@@ -121,7 +121,7 @@ public class BaseControllerTest {
 	}
 	
 	protected int getTeamPoints(long teamId) {
-		return getTeam(teamId).getRoundPoints();
+		return getTeam(teamId).getTotalPoints();
 	}
 	
 	protected List<Integer> getPlayerPoints(long playerId) {

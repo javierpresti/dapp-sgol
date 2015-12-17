@@ -44,12 +44,18 @@ function contr(name, subnames, alls, attributes) {
 				})
 			}
 		})
+		
+		
+		$scope.viewing = null
+		$scope.setViewItem = function(item) {
+			$scope.viewing = item;
+		}
 
 		$scope.editing = null
 		$scope.setEditItem = function(item) {
 			$scope.editing = item;
 		}
-		$scope.editItem = function(a,b) {
+		$scope.editItem = function() {
 			obj = $scope.editing
 			args = [].slice.apply(arguments)
 			args.forEach(function(arg) { $scope[setString(arg)](obj[arg], obj["id"]) })
@@ -70,10 +76,10 @@ function route(routeProvider, name, controller) {
 }
 
 var app = angular.module('app', ['ngRoute'])
-	.controller('teams', contr('teams', ['name','points','player','playerremove','captain']))
-	.controller('players', contr('players', ['points','goals'], ['goals'], {position:'Defender'}))
-	.controller('leagues', contr('leagues', ['round','team'], [], {minTeams:2, maxTeams:2}))
-	.controller('rounds', contr('rounds', ['match']))
+	.controller('teams', contr('teams', ['name','totalpoints','player','playerremove','captain']))
+	.controller('players', contr('players', ['points','goals', 'all'], ['goals'], {position:'Defender'}))
+	.controller('leagues', contr('leagues', ['round','team','init'], [], {minTeams:2, maxTeams:2}))
+	.controller('rounds', contr('players', ['match']))
 	.controller('matches', contr('matches', ['points']))
 ;
 

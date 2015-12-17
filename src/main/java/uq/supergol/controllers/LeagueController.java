@@ -56,5 +56,10 @@ public class LeagueController extends BaseController {
 		return getResponseEntity(saveLeague(getLeague(leagueId).addTeam(getTeam(teamId))),
 				HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "/{leagueId}/init", method = RequestMethod.POST)
+	ResponseEntity<?> init(@PathVariable Long leagueId) {
+		return getResponseEntity(saveLeague(getLeague(leagueId).init()), HttpStatus.OK);
+	}
 
 }

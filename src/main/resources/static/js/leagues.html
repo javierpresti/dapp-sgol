@@ -1,6 +1,6 @@
 <div class="container">
 	<div ng-controller="leagues" ng-cloak class="ng-cloak">
-		<div ng-hide="editing">
+		<div ng-hide="editing || viewing">
 			<div class="form">
 				<label for="name">Nombre:</label>
 				<input id="name" ng-model="name" type="text" />
@@ -20,6 +20,7 @@
 					<th>Rondas</th>
 					<th>Equipos</th>
 					<th></th>
+					<th></th>
 				</tr>
 				<tr ng-repeat="league in leagues">
 					<td>{{league.id}}</td>
@@ -29,11 +30,56 @@
 					<td>{{league.rounds.length}}</td>
 					<td>{{league.teams.length}}</td>
 					<td>
+						<button class="btn bln-lg" ng-click="setViewItem(league)">Ver</button>
+					</td>
+					<td>
 						<button class="btn bln-lg" ng-click="setEditItem(league)">Editar</button>
+					</td>
+					<td>
+						<button class="btn bln-lg" ng-click="setInit(league, league.id)">Comenzar</button>
 					</td>
 				</tr>
 			</table>
 		</div>
+		<div ng-show="viewing">
+			<h4>Viendo liga id {{viewing.id}}</h4>
+			<div>
+				<h3>Equipos</h3>
+				<table class="table">
+					<tr>
+						<th>Id</th>
+						<th>Nombre</th>
+						<th>Puntos</th>
+					</tr>
+					<tr ng-repeat="team in viewing.teams | orderBy:'-totalPoints'">
+						<td>{{team.id}}</td>
+						<td>{{team.name}}</td>
+						<td>{{team.totalPoints}}</td>
+					</tr>
+				</table>
+			</div>
+			<div>
+				<h3>Rondas</h3>
+					<div ng-repeat="round in viewing.rounds">
+						<h4>Ronda</h4>
+						<div ng-repeat="match in round.matches">
+							<table class="table">
+								<tr>
+									<th>{{match.team0.name}}</th>
+									<th>{{match.team1.name}}</th>
+									<th>Ganador</th>
+								</tr>
+								<tr>
+									<td>{{match.score0}}</td>
+									<td>{{match.score1}}</td>
+									<td>{{match.winner.name}}</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+			</div>
+		</div>
+
 		<div ng-show="editing">
 			<h4>Editar liga id {{editing.id}}</h4>
 			<div class="form">

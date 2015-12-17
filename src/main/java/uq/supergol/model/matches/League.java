@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
@@ -21,7 +22,7 @@ public class League extends BaseEntity {
 	protected String name;
 	protected int minTeams;
 	protected int maxTeams;
-	@OneToMany(fetch = FetchType.EAGER)
+	@OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
 	protected List<Round> rounds = new ArrayList<Round>();
 	@ManyToMany(fetch = FetchType.EAGER)
 	protected Set<Team> teams = new HashSet<Team>();
@@ -34,14 +35,17 @@ public class League extends BaseEntity {
 		this.maxTeams = maxTeams;
 	}
 	
-	public void init() throws RuntimeException {
-		if (!canInit()) {
-			throw new RuntimeException("League can not init");
+	public League init() throws RuntimeException {
+//		if (!canInit()) {
+//			throw new RuntimeException("League can not init");
+//		}
+//		if (isInited()) {
+//			throw new RuntimeException("League has already begun");
+//		}
+		if (canInit() &&!isInited()) {
+			arrangeRounds();
 		}
-		if (isInited()) {
-			throw new RuntimeException("League has already begun");
-		}
-		arrangeRounds();
+		return this;
 	}
 	
 	protected void arrangeRounds() {
@@ -62,7 +66,7 @@ public class League extends BaseEntity {
 			while (team0 < qtyMatches) {
 				matches.add(new Match(teams.get(team0++), teams.get(team1--)));
 			}
-			getRounds().add(new Round(matches.toArray(new Match[] {})));
+			addRound(new Round(matches));
 			
 			Team lastTeam = teams.get(teams.size() - 1);
 			teams.remove(teams.size() - 1);

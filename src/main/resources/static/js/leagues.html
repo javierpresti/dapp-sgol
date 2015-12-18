@@ -33,10 +33,10 @@
 						<button class="btn bln-lg" ng-click="setViewItem(league)">Ver</button>
 					</td>
 					<td>
-						<button class="btn bln-lg" ng-click="setEditItem(league); getTeams()">Editar</button>
+						<button ng-hide="league.inited" class="btn bln-lg" ng-click="setEditItem(league); getTeams()">Editar</button>
 					</td>
 					<td>
-						<button class="btn bln-lg" ng-click="setInit(league, league.id)">Comenzar</button>
+						<button ng-hide="league.inited" class="btn bln-lg" ng-click="setInit(league, league.id)">Comenzar</button>
 					</td>
 				</tr>
 			</table>

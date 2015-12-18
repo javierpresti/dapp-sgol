@@ -1,6 +1,8 @@
 package uq.supergol.controllers;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +45,11 @@ public class PlayerController extends BaseController {
 	@RequestMapping(method = RequestMethod.GET)
 	Collection<Player> readPlayers() {
 		return getPlayers();
+	}
+	
+	@RequestMapping(value = "/positions", method = RequestMethod.GET)
+	Collection<Position> readPositions() {
+		return Arrays.asList(Position.values());
 	}
 	
 	@RequestMapping(value = "/position/{position}", method = RequestMethod.GET)

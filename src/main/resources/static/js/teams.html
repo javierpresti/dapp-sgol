@@ -1,6 +1,6 @@
 <div class="container">
 	<div ng-controller="teams" ng-cloak class="ng-cloak">
-		<div ng-hide="editing">
+		<div ng-hide="editing || viewing">
 			<div class="form">
 				<label for="name">Nombre:</label>
 				<input id="name" ng-model="name" type="text" />
@@ -15,6 +15,7 @@
 					<th>Capitán</th>
 					<th>Jugadores</th>
 					<th></th>
+					<th></th>
 				</tr>
 				<tr ng-repeat="team in teams">
 					<td>{{team.id}}</td>
@@ -25,6 +26,26 @@
 					<td>
 						<button class="btn bln-lg" ng-click="setEditItem(team)">Editar</button>
 					</td>
+					<td>
+						<button class="btn bln-lg" ng-click="setViewItem(team)">Ver</button>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div ng-show="viewing">
+			<h3>Jugadores</h3>
+			<table class="table">
+				<tr>
+					<th>Id</th>
+					<th>Nombre</th>
+					<th>Posición</th>
+					<th>Equipo</th>
+				</tr>
+				<tr ng-repeat="player in viewing.players">
+					<td>{{player.id}}</td>
+					<td>{{player.name}}</td>
+					<td>{{player.position}}</td>
+					<td>{{player.realTeam}}</td>
 				</tr>
 			</table>
 		</div>
@@ -57,6 +78,9 @@
 				<select ng-model="editing.playerremove" ng-options="p.id as p.name for p in editing.players"></select>
 				<button class="btn bln-lg" ng-click="editItem('playerremove')">Eliminar</button>
 			</div>
+		</div>
+		<div ng-show="editing || viewing">
+			<button class="btn bln-lg" ng-click="back()">Volver</button>
 		</div>
 	</div>
 </div>

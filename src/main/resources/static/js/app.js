@@ -3,7 +3,8 @@ function capitalizeFirst(string) {	return string.charAt(0).toUpperCase() + strin
 function getString(data) { return 'get' + capitalizeFirst(data) }
 function setString(data) { return 'set' + capitalizeFirst(data) }
 
-function getElse(value, els) { return typeof value !== 'undefined' ? value : els; }
+function hasValue(value) { return typeof value !== 'undefined' }
+function getElse(value, els) { return hasValue(value) ? value : els }
 
 function passAttributes(objFrom, objTo) {
 	for (var prop in objFrom) {
@@ -11,20 +12,14 @@ function passAttributes(objFrom, objTo) {
 			objTo[prop] = objFrom[prop];
 		}
 	}
+	return objTo
 }
 
-function addGet(name, scope, http) {
-	scope[getString(name)] = function() {
-		http.get('/' + name).success(function(data) {
-			scope[name] = data;
-		})
-	}
-}
-
-function addGetSub(name, scope, http, subname) {
-	scope[getString(name + capitalizeFirst(subname))] = function(value) {
-		http.get('/' + name + '/' + subname + '/' + value).success(function(data) {
-			scope[name + capitalizeFirst(subname)] = data;
+function addGet(name, scope, http, subname) {
+	var fullName = name + (hasValue(subname) ? capitalizeFirst(subname) : '')
+	scope[getString(fullName)] = function(value) {
+		http.get('/' + name + (hasValue(subname)?'/' + subname + '/' + value : '')).success(function(data) {
+			scope[fullName] = data;
 		})
 	}
 }
@@ -45,7 +40,7 @@ function contr(name, subnames, alls, attributes, subgets) {
 		subnames = getElse(subnames, [])
 		subgets = getElse(subgets, [])
 		subnames.forEach(function(subname) {addPost(name, $scope, $http, subname)})
-		subgets.forEach(function(subget) {addGetSub(getElse(subget.name, name), $scope, $http, subget.subname)})
+		subgets.forEach(function(subget) {addGet(getElse(subget.name, name), $scope, $http, subget.subname)})
 		
 		getElse(alls, []).forEach(function(all) {
 			$scope[setString(all)+'All'] = function(list) {
@@ -63,16 +58,21 @@ function contr(name, subnames, alls, attributes, subgets) {
 
 		$scope.editing = null
 		$scope.setEditItem = function(item) {
-			$scope.editing = item;
+			$scope.editing = passAttributes(item, {});
 		}
 		$scope.editItem = function() {
 			obj = $scope.editing
 			args = [].slice.apply(arguments)
 			args.forEach(function(arg) { $scope[setString(arg)](obj[arg], obj["id"]) })
 			$scope.editing = null
-		}		
+		}
 		
 		passAttributes(attributes, $scope)
+		
+		$scope.back = function() {
+			$scope.editing = null
+			$scope.viewing = null
+		}
 				
 		$scope[getString(name)]()
 	}
@@ -88,7 +88,7 @@ function route(routeProvider, name, controller) {
 var app = angular.module('app', ['ngRoute'])
 	.controller('teams', contr('teams', ['name','totalpoints','player','playerremove','captain'], [], {}, [{name:'players',subname:'position'}]))
 	.controller('players', contr('players', ['points','goals', 'all'], ['goals'], {position:'Defender'}))
-	.controller('leagues', contr('leagues', ['round','team','init'], [], {minTeams:2, maxTeams:2}))
+	.controller('leagues', contr('leagues', ['round','team','init'], [], {minTeams:2, maxTeams:2}, [{name:'teams'}]))
 	.controller('rounds', contr('players', ['match']))
 	.controller('matches', contr('matches', ['points']))
 ;

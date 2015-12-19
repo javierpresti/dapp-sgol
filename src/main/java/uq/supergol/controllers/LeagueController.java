@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import uq.supergol.model.Team;
 import uq.supergol.model.matches.League;
 import uq.supergol.repositories.LeagueRepository;
 import uq.supergol.repositories.MatchRepository;
@@ -35,6 +36,14 @@ public class LeagueController extends BaseController {
 		return getLeague(leagueId);
 	}
 	
+	@RequestMapping(value = "/{leagueId}/teamsToAdd", method = RequestMethod.GET)
+	Collection<Team> readTeamsToAdd(@PathVariable Long leagueId) {
+		League league = getLeague(leagueId);
+		Collection<Team> teams = getTeams();
+		teams.removeIf(team -> { return !league.canAddTeam(team); });
+		return teams;
+	}
+	
 	@RequestMapping(method = RequestMethod.GET)
 	Collection<League> readLeagues() {
 		return getLeagues();
@@ -54,6 +63,12 @@ public class LeagueController extends BaseController {
 	@RequestMapping(value = "/{leagueId}/team", method = RequestMethod.POST)
 	ResponseEntity<?> addTeam(@PathVariable Long leagueId, @RequestBody long teamId) {
 		return getResponseEntity(saveLeague(getLeague(leagueId).addTeam(getTeam(teamId))),
+				HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/{leagueId}/teamremove", method = RequestMethod.POST)
+	ResponseEntity<?> removeTeam(@PathVariable Long leagueId, @RequestBody long teamId) {
+		return getResponseEntity(saveLeague(getLeague(leagueId).removeTeam(getTeam(teamId))),
 				HttpStatus.OK);
 	}
 	

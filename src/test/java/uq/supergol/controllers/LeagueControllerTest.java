@@ -67,16 +67,5 @@ public class LeagueControllerTest extends BaseControllerTest {
 				.andExpect(status().isOk());
 		Assert.assertTrue(leagueContainsRound(league.getId(), round.getId()));
 	}
-	
-	@Test
-	public void addTeamToLeague() throws Exception {
-		League league = addLeague("L", 8, 16);
-		Team team = addTeam();
-		getMockMvc().perform(post("/leagues/" + league.getId() + "/team")
-				.content(String.valueOf(team.getId()))
-				.contentType(getContentType()))
-		.andExpect(status().isOk());
-		Assert.assertTrue(leagueContainsTeam(league.getId(), team.getId()));
-	}
 
 }

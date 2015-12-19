@@ -42,7 +42,7 @@ public class League extends BaseEntity {
 //		if (isInited()) {
 //			throw new RuntimeException("League has already begun");
 //		}
-		if (canInit() &&!isInited()) {
+		if (isReady() &&!isInited()) {
 			arrangeRounds();
 		}
 		return this;
@@ -78,20 +78,44 @@ public class League extends BaseEntity {
 		return !getRounds().isEmpty();
 	}
 
-	public boolean canInit() {
+	public boolean isReady() {
 		return getTeams().size() >= getMinTeams() && getTeams().size() <= getMaxTeams();
 	}
 	
-	protected boolean canAddTeam() {
-		return getTeams().size() < getMaxTeams();
+	public boolean contains(Long teamId) {
+		boolean contains = false;
+		for (Team team : getTeams()) {
+			if (team.getId() == teamId) {
+				contains = true;
+				break;
+			}
+		}
+		return contains;
+	}
+	
+	public boolean canAddTeam(Team team) {
+		return !isInited() && getTeams().size() < getMaxTeams() && 
+				team.getLeague() == null && team.isReady();
+	}
+	
+	public boolean isFull() {
+		return getTeams().size() == getMaxTeams();
 	}
 	
 	public League addRound(Round round)	{	getRounds().add(round); return this;	}
-	public League removeTeam(Team team)	{	getTeams().remove(team); return this;	}
+	
+	public League removeTeam(Team team)	 {
+		if (!isInited()) {
+			getTeams().remove(team);
+			team.setLeague(null);
+		}
+		return this;
+	}
 	
 	public League addTeam(Team team) {
-		if (canAddTeam()) {
+		if (canAddTeam(team)) {
 			getTeams().add(team);
+			team.setLeague(this);
 		}
 		return this;
 	}

@@ -33,14 +33,12 @@ public class Application {
 	public CommandLineRunner demo(TeamRepository teamRepository, PlayerRepository playerRepository,
 			MatchRepository matchRepository, RoundRepository roundRepository, LeagueRepository leagueRepository) {
 		return (args) -> {
-			Player player1 = new Player("Jorge", Position.Defender, "Boca");
-			Player player2 = new Player("Pablo", Position.Forward, "River");
-			Player player3 = new Player("Tomas", Position.GoalKeeper, "Arsenal");
-			Player player4 = new Player("Carlos", Position.Forward, "Lanus");
-			playerRepository.save(player1);
-			playerRepository.save(player2);
-			playerRepository.save(player3);
-			playerRepository.save(player4);
+			for (int i = 0; i < 4; i++) {
+				playerRepository.save(new Player("gk" + i, Position.GoalKeeper, "Eq"));
+				playerRepository.save(new Player("def" + i, Position.Defender, "Eq"));
+				playerRepository.save(new Player("mid" + i, Position.Midfielder, "L"));
+				playerRepository.save(new Player("for" + i, Position.Forward, "Eq"));
+			}
 			
 			List<Team> teams = new ArrayList<>();
 			for (int i = 1; i < 8; i++) {
@@ -53,9 +51,6 @@ public class Application {
 			
 			League league1 = new League("liga1", 2, 8);
 			League league2 = new League("liga2", 2, 4);
-			league1.addTeam(teams.get(0)).addTeam(teams.get(1)).addTeam(teams.get(2)).
-					addTeam(teams.get(3));
-			league2.addTeam(teams.get(4)).addTeam(teams.get(5));
 			leagueRepository.save(league1);
 			leagueRepository.save(league2);
 		};

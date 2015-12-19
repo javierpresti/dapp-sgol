@@ -34,10 +34,10 @@
 						<button class="btn bln-lg" ng-click="setViewItem(league)">Ver</button>
 					</td>
 					<td>
-						<button ng-hide="league.inited" class="btn bln-lg" ng-click="setEditItem(league); getTeams()">Editar</button>
+						<button ng-hide="league.inited" class="btn bln-lg" ng-click="setEditItem(league); getIdTeamsToAdd(league.id)">Editar</button>
 					</td>
 					<td>
-						<button ng-hide="league.inited" class="btn bln-lg" ng-click="setInit(league, league.id)">Comenzar</button>
+						<button ng-hide="league.inited" ng-disabled="!league.ready" class="btn bln-lg" ng-click="setInit(league, league.id)">Comenzar</button>
 					</td>
 				</tr>
 			</table>
@@ -85,9 +85,17 @@
 			<h4>Editar liga id {{editing.id}}</h4>
 			<form class="css-form" name="editForm" novalidate >
 				<label for="team">Equipo:</label>
-				<select name="team" ng-model="team" ng-options="t.id as t.name for t in teams" required />
-				<button class="btn bln-lg" ng-disabled="editForm.$invalid" ng-click="editItem('team')">Agregar equipo</button>
+				<select name="team" ng-model="team" ng-options="t.id as t.name for t in idTeamsToAdd" required />
+				<button class="btn bln-lg" ng-disabled="editForm.$invalid || editing.full" ng-click="editItem('team')">Agregar equipo</button>
 			</form>
+			<form class="css-form" name="editRemoveForm" novalidate >
+				<label for="teamremove">Jugador:</label>
+				<select name="teamremove" ng-model="teamremove" 
+						ng-options="t.id as t.name for t in editing.teams" required />
+				<input type="submit" ng-disabled="editRemoveForm.$invalid" class="btn bln-lg"
+						ng-click="editItem('teamremove')" value="Eliminar" />
+			</form>
+
 		</div>
 		<div ng-show="editing || viewing">
 			<button class="btn bln-lg" ng-click="back()">Volver</button>

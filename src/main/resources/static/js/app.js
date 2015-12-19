@@ -18,7 +18,17 @@ function passAttributes(objFrom, objTo) {
 function addGet(name, scope, http, subname) {
 	var fullName = name + (hasValue(subname) ? capitalizeFirst(subname) : '')
 	scope[getString(fullName)] = function(value) {
-		http.get('/' + name + (hasValue(subname)?'/' + subname + '/' + value : '')).success(function(data) {
+		http.get('/' + name + (hasValue(subname)?'/' + subname + 
+				(hasValue(value) ? '/' + value : '') : '')).success(function(data) {
+			scope[fullName] = data;
+		})
+	}
+}
+
+function addGetId(name, scope, http, subname) {
+	var fullName = 'id' + (hasValue(subname) ? capitalizeFirst(subname) : '')
+	scope[getString(fullName)] = function(id) {
+		http.get('/' + name + '/' + id + '/' + (hasValue(subname)?'/' + subname : '')).success(function(data) {
 			scope[fullName] = data;
 		})
 	}
@@ -32,15 +42,17 @@ function addPost(name, scope, http, subname) {
 	}
 }
 
-function contr(name, subnames, alls, attributes, subgets) {
+function contr(name, subnames, alls, attributes, subgets, ids) {
 	
 	return function($scope, $http) {
-		addGet(name, $scope, $http)
+		addGet(name, $scope, $http)		
 		addPost(name, $scope, $http)
 		subnames = getElse(subnames, [])
 		subgets = getElse(subgets, [])
+		ids = getElse(ids, [])
 		subnames.forEach(function(subname) {addPost(name, $scope, $http, subname)})
 		subgets.forEach(function(subget) {addGet(getElse(subget.name, name), $scope, $http, subget.subname)})
+		ids.forEach(function(idName) {addGetId(name, $scope, $http, idName)})
 		
 		getElse(alls, []).forEach(function(all) {
 			$scope[setString(all)+'All'] = function(list) {
@@ -91,7 +103,7 @@ function route(routeProvider, name, controller) {
 var app = angular.module('app', ['ngRoute'])
 	.controller('teams', contr('teams', ['name','totalpoints','player','playerremove','captain'], [], {}, [{name:'players',subname:'position'}]))
 	.controller('players', contr('players', ['points','goals', 'all'], ['goals'], {position:'Defender'}))
-	.controller('leagues', contr('leagues', ['round','team','init'], [], {minTeams:2, maxTeams:2}, [{name:'teams'}]))
+	.controller('leagues', contr('leagues', ['round','team','teamremove','init'], [], {minTeams:2, maxTeams:2}, [], ['teamsToAdd']))
 	.controller('rounds', contr('players', ['match']))
 	.controller('matches', contr('matches', ['points']))
 ;

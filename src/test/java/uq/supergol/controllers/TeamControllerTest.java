@@ -28,7 +28,7 @@ public class TeamControllerTest extends BaseControllerTest {
 	public void playerNotFound() throws Exception {
 		Team team = addTeam();
 		getMockMvc().perform(post("/teams/" + team.getId() + "/player")
-				.content("15")
+				.content("-1")
 				.contentType(getContentType()))
 				.andExpect(status().isNotFound());
 	}

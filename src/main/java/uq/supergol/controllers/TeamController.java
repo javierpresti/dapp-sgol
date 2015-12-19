@@ -40,6 +40,13 @@ public class TeamController extends BaseController {
 		return getTeams();
 	}
 	
+	@RequestMapping(value = "/ready", method = RequestMethod.GET)
+	Collection<Team> readReadyTeams() {
+		Collection<Team> teams = getTeams();
+		teams.removeIf(team -> {return !team.isReady();});
+		return teams;
+	}
+	
 	@RequestMapping(method = RequestMethod.POST)
 	ResponseEntity<?> addTeam(@RequestBody Team input) {
 		return getResponseEntity(saveTeam(input), HttpStatus.CREATED);

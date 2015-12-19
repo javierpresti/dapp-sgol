@@ -11,6 +11,10 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import uq.supergol.model.matches.League;
+
 @Entity
 public class Team extends BaseEntity {
 
@@ -22,6 +26,9 @@ public class Team extends BaseEntity {
 	protected Player captain;
 	@ManyToMany(mappedBy = "teams", fetch = FetchType.EAGER)
 	protected Set<Player> players = new HashSet<Player>();
+	@ManyToOne
+	@JsonIgnore
+	protected League league;
 	
 	Team() {}
 	
@@ -50,8 +57,12 @@ public class Team extends BaseEntity {
 		return this;
 	}
 	
-	public boolean teamisReady() {
+	public boolean isReady() {
 		return getCaptain() != null && getPlayers().size() == 11;
+	}
+	
+	public boolean isEditable() {
+		return getLeague() == null;
 	}
 	
 	private boolean canAddPlayer(Player player) {
@@ -94,11 +105,13 @@ public class Team extends BaseEntity {
 	}
 	
 	public Team setName(String name)	{	this.name = name; return this;	}
+	public Team setLeague(League league)	{	this.league = league; return this;	}
 
 	public String getName()				{	return name;	}
 	public int getTotalPoints() 		{	return totalPoints;	}
 	public List<Integer> getPoints() 	{	return points;	}
 	public Set<Player> getPlayers()		{	return players;		}
 	public Player getCaptain()			{	return captain;		}
+	public League getLeague()			{	return league;		}
 	
 }

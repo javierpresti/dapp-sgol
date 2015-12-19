@@ -1,11 +1,12 @@
 <div class="container">
 	<div ng-controller="teams" ng-cloak class="ng-cloak">
 		<div ng-hide="editing || viewing">
-			<div class="form">
+			<form class="css-form" name="addForm" novalidate >
 				<label for="name">Nombre:</label>
-				<input id="name" ng-model="name" type="text" />
-				<button id="addBtn" class="btn bln-lg" ng-click="setTeams({name: name})">Añadir equipo</button>
-			</div>
+				<input name="name" ng-model="name" type="text" required />
+				<input type="submit" ng-disabled="addForm.$invalid" class="btn bln-lg"
+						ng-click="setTeams({name: name}); name=''" value="Añadir Equipo"/>
+			</form>
 			<h3>Equipos</h3>
 			<table class="table">
 				<tr>
@@ -51,33 +52,38 @@
 		</div>
 		<div ng-show="editing">
 			<h4>Editar equipo id {{editing.id}}</h4>
-			<div>
+			<form class="css-form" name="editPlayerForm" novalidate >
 				<label for="name">Nombre:</label>
-				<input type="text" ng-model="editing.name"/>
-				<button class="btn bln-lg" ng-click="editItem('name')">Editar nombre</button>
-			</div>
-			<div>
+				<input name="name" type="text" ng-model="name" required />
+				<input type="submit" ng-disabled="editPlayerForm.$invalid" class="btn bln-lg"
+						ng-click="editItem('name')" value="Editar nombre" />
+			</form>
+			<form class="css-form" name="editCaptainForm" novalidate >
 				<label for="captain">Capitán:</label>
-				<select ng-model="editing.captain" ng-options="p.id as p.name for p in editing.players"></select>
-				<button class="btn bln-lg" ng-click="editItem('captain')">Editar capitán</button>
-			</div>
-			<div>
-				<label for="player">Jugador:</label>
-				<select id="position" ng-model="position" ng-change="getPlayersPosition(position)">
+				<select name="ca" ng-model="captain" ng-options="p.id as p.name for p in editing.players" required ></select>
+				<button type="submit" ng-disabled="editCaptainForm.$invalid"
+						 class="btn bln-lg" ng-click="editItem('captain')">Editar capitán</button>
+			</form>
+			<form class="css-form" name="editAddPForm" novalidate >
+				<label for="position">Jugador:</label>
+				<select name="position" ng-model="position" ng-change="getPlayersPosition(position)" required >
 					<option value="GoalKeeper">Arquero</option>
 					<option value="Defender">Defensor</option>
 					<option value="Midfielder">Mediocampista</option>
 					<option value="Forward">Delantero</option>
 				</select>
-				<select ng-model="editing.player"
-						ng-options="p.id as p.name for p in playersPosition"/>
-				<button class="btn bln-lg" ng-click="editItem('player')">Agregar</button>
-			</div>
-			<div>
+				<select name="player" ng-model="player" ng-disabled="editAddPForm.position.$invalid"
+						ng-options="p.id as p.name for p in playersPosition" required />
+				<input type="submit" ng-disabled="editAddPForm.player.$invalid" class="btn bln-lg"
+						ng-click="editItem('player')" value="Agregar" />
+			</form>
+			<form class="css-form" name="editRemovePForm" novalidate >
 				<label for="playerremove">Jugador:</label>
-				<select ng-model="editing.playerremove" ng-options="p.id as p.name for p in editing.players"></select>
-				<button class="btn bln-lg" ng-click="editItem('playerremove')">Eliminar</button>
-			</div>
+				<select name="playerremove" ng-model="playerremove" 
+						ng-options="p.id as p.name for p in editing.players" required />
+				<input type="submit" ng-disabled="editRemovePForm.$invalid" class="btn bln-lg"
+						ng-click="editItem('playerremove')" value="Eliminar" />
+			</form>
 		</div>
 		<div ng-show="editing || viewing">
 			<button class="btn bln-lg" ng-click="back()">Volver</button>

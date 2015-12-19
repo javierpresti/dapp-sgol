@@ -1,22 +1,22 @@
 <div class="container">
 	<div ng-controller="players" ng-cloak class="ng-cloak">
 		<div ng-hide="editing">
-			<div class="form">
-				<label for="name">Nombre:</label> 
-				<input id="name" ng-model="name" type="text" />
+			<form class="css-form" name="addForm" novalidate >
+				<label for="name">Nombre:</label>
+				<input name="name" ng-model="name" type="text" required >
 				<label for="position">Posición:</label>
-				<select id="position" ng-model="position">
+				<select name="position" ng-model="position">
 					<option value="GoalKeeper">Arquero</option>
 					<option value="Defender">Defensor</option>
 					<option value="Midfielder">Mediocampista</option>
 					<option value="Forward">Delantero</option>
 				</select>
 				<label for="realTeam">Equipo:</label> 
-				<input id="realTeam" ng-model="realTeam" type="text" />
-				<button ng-click="setPlayers({name: name, position: position, realTeam: realTeam})"
-						id="addBtn" class="btn bln-lg">Añadir jugador</button>
-				<button ng-click="setAll()" id="addBtn" class="btn bln-lg">Actualizar ronda</button>
-			</div>
+				<input name="realTeam" ng-model="realTeam" type="text" required >
+				<input type="submit" ng-disabled="addForm.$invalid" class="btn bln-lg" value="Añadir Jugador"
+						ng-click="setPlayers({name: name, position: position, realTeam: realTeam}); name=''" />
+			</form>
+			<button ng-click="setAll()" class="btn bln-lg">Actualizar ronda</button>
 			<h3>Jugadores</h3>
 			<table class="table">
 				<tr>
@@ -39,27 +39,24 @@
 				</tr>
 			</table>
 		</div>
-		<div ng-show="editing">
-			<div>
-				<label for="name">Nombre:</label>
-				<input type="text" ng-model="editing.name"/>
-			</div>
-			<div>
-				<label for="realTeam">Equipo:</label>
-				<input type="text" ng-model="editing.realTeam"/>
-			</div>
-
-			<div>
-				<label for="player">Posición:</label>
-				<select id="position" ng-model="editing.position">
-					<option value="GoalKeeper">Arquero</option>
-					<option value="Defender">Defensor</option>
-					<option value="Midfielder">Mediocampista</option>
-					<option value="Forward">Delantero</option>
-				</select>
-			</div>
-			<button class="btn bln-lg" ng-click="setPlayers({id: editing.id, name: editing.name, position: editing.position, realTeam: editing.realTeam}); editItem()">Editar</button>
+		<form ng-show="editing" class="css-form" name="editForm" novalidate >
+			<label for="name">Nombre:</label>
+			<input type="text" ng-model="editing.name" required />
+			<br />
+			<label for="realTeam">Equipo:</label>
+			<input type="text" ng-model="editing.realTeam" required />
+			<br />
+			<label for="player">Posición:</label>
+			<select ng-model="editing.position">
+				<option value="GoalKeeper">Arquero</option>
+				<option value="Defender">Defensor</option>
+				<option value="Midfielder">Mediocampista</option>
+				<option value="Forward">Delantero</option>
+			</select>
+			<br />
+			<input type="submit" ng-disabled="editForm.$invalid" class="btn bln-lg" value="Editar"
+				ng-click="setPlayers({id: editing.id, name: editing.name, position: editing.position, realTeam: editing.realTeam}); editItem()" />
 			<button class="btn bln-lg" ng-click="back()">Volver</button>
-		</div>
+		</form>
 	</div>
 </div>

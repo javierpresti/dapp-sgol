@@ -1,15 +1,16 @@
 <div class="container">
 	<div ng-controller="leagues" ng-cloak class="ng-cloak">
 		<div ng-hide="editing || viewing">
-			<div class="form">
+			<form class="css-form" name="addForm" novalidate >
 				<label for="name">Nombre:</label>
-				<input id="name" ng-model="name" type="text" />
+				<input name="name" ng-model="name" type="text" required />
 				<label for="minTeams">Min equipos:</label>
-				<input id="minTeams" ng-model="minTeams" type="number" min="2" />
+				<input name="minTeams" ng-model="minTeams" type="number" min="2" required />
 				<label for="maxTeams">Max equipos:</label>
-				<input id="maxTeams" ng-model="maxTeams" type="number" min="2" />
-				<button id="addBtn" class="btn bln-lg" ng-click="setLeagues({name: name, minTeams: minTeams, maxTeams: maxTeams})">Añadir liga</button>
-			</div>
+				<input name="maxTeams" ng-model="maxTeams" type="number" min="2" required />
+				<button class="btn bln-lg" ng-disabled="addForm.$invalid"
+						ng-click="setLeagues({name: name, minTeams: minTeams, maxTeams: maxTeams}); name=''">Añadir liga</button>
+			</form>
 			<h3>Ligas</h3>
 			<table class="table">
 				<tr>
@@ -82,11 +83,11 @@
 
 		<div ng-show="editing">
 			<h4>Editar liga id {{editing.id}}</h4>
-			<div class="form">
+			<form class="css-form" name="editForm" novalidate >
 				<label for="team">Equipo:</label>
-				<select id="team" ng-model="editing.team" ng-options="t.id as t.name for t in teams"/>
-				<button class="btn bln-lg" ng-click="editItem('team')">Agregar equipo</button>
-			</div>
+				<select name="team" ng-model="team" ng-options="t.id as t.name for t in teams" required />
+				<button class="btn bln-lg" ng-disabled="editForm.$invalid" ng-click="editItem('team')">Agregar equipo</button>
+			</form>
 		</div>
 		<div ng-show="editing || viewing">
 			<button class="btn bln-lg" ng-click="back()">Volver</button>

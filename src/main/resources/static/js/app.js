@@ -63,7 +63,10 @@ function contr(name, subnames, alls, attributes, subgets) {
 		$scope.editItem = function() {
 			obj = $scope.editing
 			args = [].slice.apply(arguments)
-			args.forEach(function(arg) { $scope[setString(arg)](obj[arg], obj["id"]) })
+			args.forEach(function(arg) {
+				$scope[setString(arg)]($scope[arg], obj["id"]);
+				delete $scope[arg];
+			})
 			$scope.editing = null
 		}
 		
@@ -73,7 +76,7 @@ function contr(name, subnames, alls, attributes, subgets) {
 			$scope.editing = null
 			$scope.viewing = null
 		}
-				
+		
 		$scope[getString(name)]()
 	}
 }

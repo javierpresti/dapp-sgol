@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import uq.supergol.model.Player;
+import uq.supergol.model.Position;
 import uq.supergol.model.Team;
 import uq.supergol.repositories.LeagueRepository;
 import uq.supergol.repositories.MatchRepository;
@@ -45,6 +47,15 @@ public class TeamController extends BaseController {
 		Collection<Team> teams = getTeams();
 		teams.removeIf(team -> {return !team.isReady();});
 		return teams;
+	}
+	
+	@RequestMapping(value = "/{teamId}/position/{position}", method = RequestMethod.GET)
+	Collection<Player> readPlayersOfPosition(@PathVariable Long teamId, 
+			@PathVariable String position) {
+		Team team = getTeam(teamId);
+		Collection<Player> players = playerRepository.findByPosition(Position.valueOf(position));
+		players.removeIf(player -> { return !team.canAddPlayer(player); });
+		return players;
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)

@@ -66,16 +66,16 @@
 			</form>
 			<form class="css-form" name="editAddPForm" novalidate >
 				<label for="position">Jugador:</label>
-				<select name="position" ng-model="position" ng-change="getPlayersPosition(position)" required >
+				<select name="position" ng-model="position" ng-change="getIdPosition(editing.id, position)" required >
 					<option value="GoalKeeper">Arquero</option>
 					<option value="Defender">Defensor</option>
 					<option value="Midfielder">Mediocampista</option>
 					<option value="Forward">Delantero</option>
 				</select>
 				<select name="player" ng-model="player" ng-disabled="editAddPForm.position.$invalid"
-						ng-options="p.id as p.name for p in playersPosition" required />
-				<input type="submit" ng-disabled="editAddPForm.player.$invalid" class="btn bln-lg"
-						ng-click="editItem('player')" value="Agregar" />
+						ng-options="p.id as p.name for p in idPosition" required />
+				<input type="submit" ng-disabled="editAddPForm.player.$invalid || editing.full" class="btn bln-lg"
+						ng-click="editItem('player'); position=''" value="Agregar" />
 			</form>
 			<form class="css-form" name="editRemovePForm" novalidate >
 				<label for="playerremove">Jugador:</label>

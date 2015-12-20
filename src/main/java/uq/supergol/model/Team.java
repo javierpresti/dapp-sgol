@@ -58,15 +58,19 @@ public class Team extends BaseEntity {
 	}
 	
 	public boolean isReady() {
-		return getCaptain() != null && getPlayers().size() == 11;
+		return getCaptain() != null && isFull();
+	}
+	
+	public boolean isFull() {
+		return getPlayers().size() == 11;
 	}
 	
 	public boolean isEditable() {
 		return getLeague() == null;
 	}
 	
-	private boolean canAddPlayer(Player player) {
-		boolean canAdd = getPlayers().size() < 11;
+	public boolean canAddPlayer(Player player) {
+		boolean canAdd = getPlayers().size() < 11 && !getPlayers().contains(player);
 		if (canAdd) {
 			Position position = player.getPosition();
 			canAdd = playersOfPosition(position) < position.maxPlayersPerTeam;

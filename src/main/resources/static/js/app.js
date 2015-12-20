@@ -27,8 +27,9 @@ function addGet(name, scope, http, subname) {
 
 function addGetId(name, scope, http, subname) {
 	var fullName = 'id' + (hasValue(subname) ? capitalizeFirst(subname) : '')
-	scope[getString(fullName)] = function(id) {
-		http.get('/' + name + '/' + id + '/' + (hasValue(subname)?'/' + subname : '')).success(function(data) {
+	scope[getString(fullName)] = function(id, valu) {
+		http.get('/' + name + '/' + id + '/' + (hasValue(subname)?'/' + subname : '') + 
+				(hasValue(valu)?'/'+valu:'')).success(function(data) {
 			scope[fullName] = data;
 		})
 	}
@@ -42,7 +43,7 @@ function addPost(name, scope, http, subname) {
 	}
 }
 
-function contr(name, subnames, alls, attributes, subgets, ids) {
+function contr(name, subnames, alls, attributes, ids, subgets) {
 	
 	return function($scope, $http) {
 		addGet(name, $scope, $http)		
@@ -101,9 +102,9 @@ function route(routeProvider, name, controller) {
 }
 
 var app = angular.module('app', ['ngRoute'])
-	.controller('teams', contr('teams', ['name','totalpoints','player','playerremove','captain'], [], {}, [{name:'players',subname:'position'}]))
+	.controller('teams', contr('teams', ['name','totalpoints','player','playerremove','captain'], [], {}, ['position']))
 	.controller('players', contr('players', ['points','goals', 'all'], ['goals'], {position:'Defender'}))
-	.controller('leagues', contr('leagues', ['round','team','teamremove','init'], [], {minTeams:2, maxTeams:2}, [], ['teamsToAdd']))
+	.controller('leagues', contr('leagues', ['round','team','teamremove','init'], [], {minTeams:2, maxTeams:2}, ['teamsToAdd']))
 	.controller('rounds', contr('players', ['match']))
 	.controller('matches', contr('matches', ['points']))
 ;

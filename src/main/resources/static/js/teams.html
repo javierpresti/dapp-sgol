@@ -42,7 +42,7 @@
 					<th>Posición</th>
 					<th>Equipo</th>
 				</tr>
-				<tr ng-repeat="player in viewing.players">
+				<tr ng-repeat="player in viewing.players | orderBy: 'position'">
 					<td>{{player.id}}</td>
 					<td>{{player.name}}</td>
 					<td>{{player.position}}</td>

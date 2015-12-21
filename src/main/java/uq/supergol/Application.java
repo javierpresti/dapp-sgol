@@ -10,8 +10,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import uq.supergol.data.InitializeCSVReader;
+import uq.supergol.data.UpdateCSVReader;
 import uq.supergol.model.Player;
-import uq.supergol.model.Position;
 import uq.supergol.model.Team;
 import uq.supergol.model.matches.League;
 import uq.supergol.repositories.LeagueRepository;
@@ -32,12 +33,11 @@ public class Application {
 	@Bean
 	public CommandLineRunner demo(TeamRepository teamRepository, PlayerRepository playerRepository,
 			MatchRepository matchRepository, RoundRepository roundRepository, LeagueRepository leagueRepository) {
-		return (args) -> {
-			for (int i = 0; i < 4; i++) {
-				playerRepository.save(new Player("gk" + i, Position.GoalKeeper, "Eq"));
-				playerRepository.save(new Player("def" + i, Position.Defender, "Eq"));
-				playerRepository.save(new Player("mid" + i, Position.Midfielder, "L"));
-				playerRepository.save(new Player("for" + i, Position.Forward, "Eq"));
+		return (args) -> {			
+			List<Player> players = new InitializeCSVReader().readFile();
+			
+			for (Player player : players) {
+				playerRepository.save(player);
 			}
 			
 			List<Team> teams = new ArrayList<>();

@@ -63,7 +63,6 @@ function contr(name, subnames, alls, attributes, ids, subgets) {
 			}
 		})
 		
-		
 		$scope.viewing = null
 		$scope.setViewItem = function(item) {
 			$scope.viewing = item;
@@ -103,9 +102,9 @@ function route(routeProvider, name, controller) {
 
 var app = angular.module('app', ['ngRoute'])
 	.controller('teams', contr('teams', ['name','totalpoints','player','playerremove','captain'], [], {}, ['position']))
-	.controller('players', contr('players', ['points','goals', 'all'], ['goals'], {position:'Defender'}))
+	.controller('players', contr('players', ['points','goals', 'all','update'], ['goals'], {position:'Defender'}))
 	.controller('leagues', contr('leagues', ['round','team','teamremove','init'], [], {minTeams:2, maxTeams:2}, ['teamsToAdd']))
-	.controller('rounds', contr('players', ['match']))
+	.controller('rounds', contr('players', ['match','update']))
 	.controller('matches', contr('matches', ['points']))
 ;
 

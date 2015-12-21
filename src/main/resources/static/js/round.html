@@ -1,5 +1,9 @@
 <div class="container">
 	<div ng-controller="players" ng-cloak class="ng-cloak">
+		<div>
+			<input type = "file" file-model = "myFile"/>
+			<button class="btn bln-lg" ng-click="setUpdate()">Subir update</button>
+		</div>
 		<h3>Goles por jugador</h3>
 		<table class="table">
 			<tr>
@@ -19,6 +23,6 @@
 				</td>
 			</tr>
 		</table>
-		<button id="updateBtn" class="btn bln-lg" ng-click="setGoalsAll(players)">Incluir fecha</button>
+		<button class="btn bln-lg" ng-click="setGoalsAll(players)">Incluir fecha</button>
 	</div>
 </div>

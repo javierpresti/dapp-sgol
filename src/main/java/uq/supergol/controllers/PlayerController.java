@@ -1,5 +1,7 @@
 package uq.supergol.controllers;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import uq.supergol.data.UpdateCSVReader;
 import uq.supergol.model.Player;
 import uq.supergol.model.Position;
 import uq.supergol.model.Team;
@@ -71,6 +74,20 @@ public class PlayerController extends BaseController {
 	@RequestMapping(value = "/{playerId}/goals", method = RequestMethod.POST)
 	ResponseEntity<?> addGoals(@PathVariable Long playerId, @RequestBody int goals) {
 		return getResponseEntity(savePlayer(getPlayer(playerId).setGoals(goals)), HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	ResponseEntity<?> updateGoals() {
+		List<Player> players;
+		try {
+			players = new UpdateCSVReader(playerRepository).readFile();
+			for (Player player : players) {
+				savePlayer(player);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return getResponseEntity(savePlayer(getPlayer(1)), HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/all", method = RequestMethod.POST)
